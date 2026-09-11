@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In / Register | SkyWings Portal</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Outfit"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col justify-between antialiased">
+
+  <!-- ================= TOP HEADER ================= -->
+  <header class="bg-slate-900 text-white py-4 px-6 border-b border-slate-800">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2.5 group select-none">
+        <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white text-base shadow-md">
+          ✈
+        </div>
+        <span class="font-display text-xl font-extrabold tracking-tight text-white">SkyWings</span>
+      </a>
+      <a href="index.html" class="text-xs font-bold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-3.5 py-2 rounded-xl transition">
+        ← Back to Flights
+      </a>
+    </div>
+  </header>
+
+  <!-- ================= MAIN AUTH CARD ================= -->
+  <main class="flex-1 flex items-center justify-center p-4 my-8">
+    <div class="bg-white rounded-3xl shadow-xl border border-slate-200 max-w-md w-full overflow-hidden">
+      
+      <!-- Card Header -->
+      <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-6 text-center space-y-1">
+        <div class="w-12 h-12 rounded-2xl bg-blue-600/30 text-blue-400 flex items-center justify-center text-2xl mx-auto border border-blue-400/20">
+          👤
+        </div>
+        <h2 id="auth-heading" class="font-display font-extrabold text-xl text-white pt-2">Welcome to SkyWings</h2>
+        <p id="auth-subheading" class="text-xs text-slate-300">Sign in to your account to manage bookings</p>
+      </div>
+
+      <!-- Tab Switcher (Sign In / Register) -->
+      <div class="flex border-b border-slate-200 text-xs font-bold bg-slate-50">
+        <button type="button" id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-3 text-center text-blue-600 border-b-2 border-blue-600 bg-white transition cursor-pointer">
+          Sign In
+        </button>
+        <button type="button" id="tab-register-btn" onclick="switchAuthTab('register')" class="flex-1 py-3 text-center text-slate-500 hover:text-slate-800 transition cursor-pointer">
+          Create Account
+        </button>
+      </div>
+
+      <!-- Form Container -->
+      <div class="p-6">
+        
+        <!-- Alert Notification Box -->
+        <div id="auth-alert" class="hidden p-3 rounded-xl text-xs font-bold mb-4 flex items-center gap-2">
+          <span id="alert-icon">⚠️</span>
+          <span id="alert-text">Message</span>
+        </div>
+
+        <!-- AUTH FORM -->
+        <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-3.5 text-xs">
+          
+          <!-- Full Name (Register Only) -->
+          <div id="field-name" class="hidden">
+            <label for="user-name" class="block font-bold text-slate-700 uppercase text-[10px] tracking-wider mb-1">Full Name *</label>
+            <input type="text" id="user-name" placeholder="Aman Sharma" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs font-bold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none text-slate-900" />
+          </div>
+
+          <!-- Phone Number (Register Only) -->
+          <div id="field-phone" class="hidden">
+            <label for="user-phone" class="block font-bold text-slate-700 uppercase text-[10px] tracking-wider mb-1">Mobile Phone (10 Digits) *</label>
+            <input type="tel" id="user-phone" pattern="[0-9]{10}" placeholder="9876543210" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs font-bold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none text-slate-900" />
+          </div>
+
+          <!-- Email Address -->
+          <div>
+            <label for="user-email" class="block font-bold text-slate-700 uppercase text-[10px] tracking-wider mb-1">Email Address *</label>
+            <input type="email" id="user-email" required placeholder="aman@example.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs font-bold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none text-slate-900" />
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label for="user-password" class="block font-bold text-slate-700 uppercase text-[10px] tracking-wider mb-1">Password *</label>
+            <input type="password" id="user-password" required minlength="4" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs font-bold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none text-slate-900" />
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="auth-btn" class="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-98 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-blue-600/30 transition text-sm cursor-pointer">
+            Sign In
+          </button>
+        </form>
+
+        <!-- Demo Credentials Helper -->
+        <div class="mt-5 p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-500 text-center">
+          <p class="font-bold text-slate-700">Quick Test Account:</p>
+          <p class="font-mono text-slate-600 mt-0.5">Email: <span class="text-blue-600">user@skywings.com</span> | Pass: <span class="text-blue-600">1234</span></p>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-slate-900 text-slate-500 text-xs py-5 text-center border-t border-slate-800">
+    <p>© 2026 SkyWings Airlines • LocalStorage Authentication System</p>
+  </footer>
+
+  <!-- ================= AUTHENTICATION SCRIPT ================= -->
+  <script>
+    let currentAuthMode = 'login'; // 'login' or 'register'
+
+    // Initialize Default User in LocalStorage if not already present
+    function initDefaultUser() {
+      const users = JSON.parse(localStorage.getItem("skywings_users_db") || "[]");
+      if (users.length === 0) {
+        users.push({
+          name: "Aman Sharma",
+          email: "user@skywings.com",
+          phone: "9876543210",
+          password: "1234"
+        });
+        localStorage.setItem("skywings_users_db", JSON.stringify(users));
+      }
+    }
+
+    function switchAuthTab(mode) {
+      currentAuthMode = mode;
+      const tabLogin = document.getElementById("tab-login-btn");
+      const tabRegister = document.getElementById("tab-register-btn");
+      const fieldName = document.getElementById("field-name");
+      const fieldPhone = document.getElementById("field-phone");
+      const authBtn = document.getElementById("auth-btn");
+      const heading = document.getElementById("auth-heading");
+      const subheading = document.getElementById("auth-subheading");
+      const alertBox = document.getElementById("auth-alert");
+
+      if (alertBox) alertBox.classList.add("hidden");
+
+      if (mode === 'login') {
+        tabLogin.className = "flex-1 py-3 text-center text-blue-600 border-b-2 border-blue-600 bg-white font-bold transition cursor-pointer";
+        tabRegister.className = "flex-1 py-3 text-center text-slate-500 hover:text-slate-800 font-semibold transition cursor-pointer";
+        fieldName.classList.add("hidden");
+        fieldPhone.classList.add("hidden");
+        authBtn.textContent = "Sign In";
+        heading.textContent = "Welcome to SkyWings";
+        subheading.textContent = "Sign in to your account to manage bookings";
+      } else {
+        tabRegister.className = "flex-1 py-3 text-center text-blue-600 border-b-2 border-blue-600 bg-white font-bold transition cursor-pointer";
+        tabLogin.className = "flex-1 py-3 text-center text-slate-500 hover:text-slate-800 font-semibold transition cursor-pointer";
+        fieldName.classList.remove("hidden");
+        fieldPhone.classList.remove("hidden");
+        authBtn.textContent = "Create Account";
+        heading.textContent = "Create New Account";
+        subheading.textContent = "Join SkyWings to save passengers and auto-fill bookings";
+      }
+    }
+
+    function showAlert(msg, isSuccess = false) {
+      const alertBox = document.getElementById("auth-alert");
+      const icon = document.getElementById("alert-icon");
+      const text = document.getElementById("alert-text");
+
+      text.textContent = msg;
+      icon.textContent = isSuccess ? "✅" : "⚠️";
+
+      if (isSuccess) {
+        alertBox.className = "p-3 rounded-xl text-xs font-bold mb-4 flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+      } else {
+        alertBox.className = "p-3 rounded-xl text-xs font-bold mb-4 flex items-center gap-2 bg-rose-50 text-rose-800 border border-rose-200";
+      }
+      alertBox.classList.remove("hidden");
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+
+      const email = document.getElementById("user-email").value.trim().toLowerCase();
+      const password = document.getElementById("user-password").value;
+      const users = JSON.parse(localStorage.getItem("skywings_users_db") || "[]");
+
+      if (currentAuthMode === 'login') {
+        // Sign In Flow
+        const user = users.find(u => u.email.toLowerCase() === email && u.password === password);
+        if (!user) {
+          showAlert("Invalid email or password. Please try again.");
+          return;
+        }
+
+        // Save Current User Session in LocalStorage
+        localStorage.setItem("skywings_current_session", JSON.stringify({
+          name: user.name,
+          email: user.email,
+          phone: user.phone
+        }));
+
+        showAlert(`Welcome back, ${user.name}! Redirecting...`, true);
+
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+
+      } else {
+        // Register Flow
+        const name = document.getElementById("user-name").value.trim();
+        const phone = document.getElementById("user-phone").value.trim();
+
+        if (!name || !phone) {
+          showAlert("Please fill in your name and 10-digit phone number.");
+          return;
+        }
+
+        // Check if email already registered
+        const existing = users.find(u => u.email.toLowerCase() === email);
+        if (existing) {
+          showAlert("This email is already registered. Please Sign In.");
+          return;
+        }
+
+        // Save new user to LocalStorage
+        const newUser = { name, email, phone, password };
+        users.push(newUser);
+        localStorage.setItem("skywings_users_db", JSON.stringify(users));
+
+        // Save Current Session
+        localStorage.setItem("skywings_current_session", JSON.stringify({
+          name: newUser.name,
+          email: newUser.email,
+          phone: newUser.phone
+        }));
+
+        showAlert(`Account created successfully for ${name}! Redirecting...`, true);
+
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initDefaultUser();
+    });
+  </script>
+</body>
+</html>
