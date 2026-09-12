@@ -1,11 +1,12 @@
+<!-- DEMO ONLY: This authentication and booking system is 100% client-side, stored in browser localStorage. No data is ever transmitted to any server. Built for portfolio/learning purposes. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkyWings | Flight Search & Booking Portal</title>
+  <title>AeroDemo | Flight Booking Sandbox (Portfolio Project)</title>
   
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS CDN (Styling only) -->
   <script src="https://cdn.tailwindcss.com"></script>
   
   <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
@@ -44,15 +45,21 @@
 
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
 
+  <!-- ================= PROMINENT DEMO DISCLAIMER BANNER ================= -->
+  <div class="bg-amber-400 text-slate-950 font-bold px-4 py-2.5 text-xs text-center border-b border-amber-500 shadow-xs flex items-center justify-center gap-2">
+    <span class="text-base">⚠️</span>
+    <span><strong>DEMO / PORTFOLIO PROJECT:</strong> This is a fictional educational sandbox. No real airline bookings, payments, or data collection take place. All data is saved strictly in your browser's local storage (LocalStorage). Do NOT enter real-world personal information.</span>
+  </div>
+
   <!-- ================= TOAST NOTIFICATION ================= -->
-  <div id="toast" class="fixed top-5 right-5 z-50 transform -translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+  <div id="toast" class="fixed top-12 right-5 z-50 transform -translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
     <div class="bg-slate-900/95 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 border border-slate-700">
       <span id="toast-icon" class="text-lg">✨</span>
       <p id="toast-msg" class="text-xs font-semibold">Action completed</p>
     </div>
   </div>
 
-  <!-- ================= SLEEK NAVBAR WITH AUTH STATUS ================= -->
+  <!-- ================= SLEEK NAVBAR WITH DEMO PROFILE STATUS ================= -->
   <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-40 border-b border-slate-800">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-3.5 flex items-center justify-between">
       
@@ -62,8 +69,8 @@
           ✈
         </div>
         <div>
-          <span class="font-display text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-sky-300 bg-clip-text text-transparent">SkyWings</span>
-          <span class="text-[10px] text-slate-400 block -mt-1 font-semibold tracking-wide">Airlines Reservation Portal</span>
+          <span class="font-display text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-sky-300 bg-clip-text text-transparent">AeroDemo</span>
+          <span class="text-[10px] text-amber-400 block -mt-1 font-semibold tracking-wide">Flight Booking Sandbox • Portfolio Demo</span>
         </div>
       </a>
 
@@ -71,18 +78,18 @@
       <div class="flex items-center gap-2.5 sm:gap-3.5">
         
         <a href="#search-container" class="hidden sm:block text-xs font-semibold text-slate-300 hover:text-white px-3 py-2 rounded-xl hover:bg-slate-800 transition">
-          Search Flights
+          Search Schedules
         </a>
 
         <!-- My Bookings Badge Button -->
         <a href="#bookings-container" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition shadow flex items-center gap-2 active:scale-95 border border-slate-700">
-          <span>🎫 My Bookings</span>
+          <span>🎫 Demo Bookings</span>
           <span id="nav-count" class="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full shadow-xs">0</span>
         </a>
 
         <!-- User Authentication Area (Controlled by LocalStorage) -->
         <div id="navbar-auth-container">
-          <!-- Injected dynamically: either 'Sign In' link or '👤 Aman | Logout' -->
+          <!-- Injected dynamically: either 'Demo Profile' link or '👤 Aman | Logout' -->
         </div>
 
       </div>
@@ -100,11 +107,14 @@
       
       <!-- Headline -->
       <div class="text-center space-y-2">
+        <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-400/20 text-blue-300 text-xs font-bold px-3.5 py-1.5 rounded-full">
+          <span>🛠️ Educational Web Development Project</span>
+        </div>
         <h1 class="text-2xl sm:text-4xl font-display font-extrabold tracking-tight text-white">
-          Find & Book Domestic and International Flights
+          Simulated Flight Search & Reservation System
         </h1>
-        <p class="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto">
-          Instant schedules, confirmed ticket booking, and easy cancellation management.
+        <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto">
+          Explore instant simulated routes, filter by departure timings, and test client-side LocalStorage booking and cancellation flows.
         </p>
       </div>
 
@@ -169,35 +179,23 @@
 
           </div>
 
-          <!-- Bottom Action Bar -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100 text-xs">
-            
-            <!-- Quick Route Shortcut Buttons -->
-            <div class="flex flex-wrap items-center gap-1.5 text-slate-600">
-              <span class="font-bold text-slate-400 text-[10px] uppercase tracking-wider mr-1">Quick Picks:</span>
-              <button type="button" onclick="setQuickRoute('Delhi (DEL)', 'Mumbai (BOM)')" class="bg-slate-100 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 px-3 py-1.5 rounded-xl transition font-semibold border border-slate-200">
-                Delhi ➔ Mumbai
-              </button>
-              <button type="button" onclick="setQuickRoute('Mumbai (BOM)', 'Goa (GOI)')" class="bg-slate-100 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 px-3 py-1.5 rounded-xl transition font-semibold border border-slate-200">
-                Mumbai ➔ Goa
-              </button>
-              <button type="button" onclick="setQuickRoute('Delhi (DEL)', 'Dubai (DXB)')" class="bg-slate-100 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 px-3 py-1.5 rounded-xl transition font-semibold border border-slate-200">
-                Delhi ➔ Dubai
-              </button>
-            </div>
-
-            <!-- Find Flights CTA Button -->
-            <button type="submit" id="search-submit-btn" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-extrabold py-3 px-6 rounded-2xl shadow-lg shadow-blue-600/30 transition flex items-center justify-center gap-2 cursor-pointer text-sm">
-              <span id="search-btn-icon">🔍</span>
-              <span id="search-btn-text">Find Flights</span>
-            </button>
-
+          <!-- Error Alert for Same Origin & Destination -->
+          <div id="route-error" class="hidden bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold p-3 rounded-2xl flex items-center gap-2">
+            <span>⚠️</span>
+            <span>Origin and Destination cannot be the same city. Please pick different locations.</span>
           </div>
 
-          <!-- Route Error Box -->
-          <div id="route-error" class="hidden p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold rounded-2xl flex items-center gap-2">
-            <span>⚠️</span>
-            <span>Departure and destination cities cannot be identical. Please choose different airports.</span>
+          <!-- Search Action Button Bar -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+              <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Showing simulated flight schedules across mock routes</span>
+            </div>
+
+            <button type="submit" id="search-flights-btn" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-extrabold px-8 py-3.5 rounded-2xl shadow-lg shadow-blue-600/30 active:scale-95 transition flex items-center justify-center gap-2 text-sm cursor-pointer">
+              <span id="search-btn-icon">🔍</span>
+              <span id="search-btn-text">Find Demo Flights</span>
+            </button>
           </div>
 
         </form>
@@ -206,23 +204,23 @@
     </div>
   </section>
 
-  <!-- ================= MAIN RESULTS & CONTENT ================= -->
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 -mt-8 flex-1 w-full space-y-6 pb-20 z-20">
-
-    <!-- ================= INITIAL STATE CARD (BEFORE SEARCH) ================= -->
-    <section id="initial-prompt-card" class="bg-white rounded-3xl p-10 border border-slate-200 text-center shadow-sm space-y-4">
-      <div class="w-16 h-16 bg-blue-50 text-blue-600 text-3xl rounded-3xl flex items-center justify-center mx-auto shadow-inner">
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 -mt-6 z-20 pb-16 space-y-8">
+    
+    <!-- ================= INITIAL PROMPT CARD (BEFORE SEARCH) ================= -->
+    <section id="initial-prompt-card" class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 text-center shadow-sm space-y-4">
+      <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center text-3xl mx-auto border border-blue-100 shadow-inner">
         🛫
       </div>
-      <div>
-        <h2 class="text-xl font-display font-extrabold text-slate-900">Select Route to Search Flights</h2>
-        <p class="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mt-1">
-          Choose your departure city and destination in the search box above to view real-time scheduled flights.
+      <div class="max-w-md mx-auto space-y-1.5">
+        <h2 class="text-xl font-display font-extrabold text-slate-900">Ready to test flight bookings?</h2>
+        <p class="text-xs text-slate-500">
+          Choose your departure city and destination in the search box above to view simulated flight schedules.
         </p>
       </div>
       <div class="pt-2">
         <button onclick="setQuickRoute('Delhi (DEL)', 'Mumbai (BOM)')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md shadow-blue-500/20">
-          View Popular Deals (Delhi ➔ Mumbai)
+          View Demo Route (Delhi ➔ Mumbai)
         </button>
       </div>
     </section>
@@ -231,8 +229,8 @@
     <div id="loading-spinner-state" class="hidden bg-white rounded-3xl p-12 border border-slate-200 text-center shadow-sm space-y-4">
       <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
       <div>
-        <h3 class="font-display font-extrabold text-slate-900 text-base">Searching Live Flight Schedules...</h3>
-        <p class="text-xs text-slate-500 mt-1">Checking flight schedules and best fares for your selected route</p>
+        <h3 class="font-display font-extrabold text-slate-900 text-base">Searching Simulated Flight Schedules...</h3>
+        <p class="text-xs text-slate-500 mt-1">Checking demo schedules and fares for your selected route</p>
       </div>
     </div>
 
@@ -244,8 +242,8 @@
         
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
           <div>
-            <h2 id="search-route-title" class="text-base sm:text-lg font-display font-extrabold text-slate-900">Available Flights</h2>
-            <p id="search-route-subtitle" class="text-xs text-slate-500 mt-0.5">Showing verified schedules matching your query.</p>
+            <h2 id="search-route-title" class="text-base sm:text-lg font-display font-extrabold text-slate-900">Available Demo Flights</h2>
+            <p id="search-route-subtitle" class="text-xs text-slate-500 mt-0.5">Showing mock schedules matching your query.</p>
           </div>
           <span id="flight-count-badge" class="bg-blue-50 text-blue-700 text-xs font-extrabold px-3 py-1 rounded-full border border-blue-200 self-start sm:self-auto">
             0 Flights Found
@@ -259,13 +257,13 @@
           <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
             <span class="text-slate-400 text-[10px] uppercase tracking-wider mr-1">View:</span>
             
-            <button id="cat-all" onclick="selectCategory('ALL')" class="px-3.5 py-2 rounded-xl bg-blue-600 text-white transition shadow-sm">
+            <button id="cat-all" onclick="selectCategory('ALL')" class="px-3.5 py-2 rounded-xl bg-blue-600 text-white transition shadow-sm font-bold">
               All Flights
             </button>
-            <button id="cat-morning" onclick="selectCategory('MORNING')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+            <button id="cat-morning" onclick="selectCategory('MORNING')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition font-semibold">
               🌅 Morning Flights (6 AM - 12 PM)
             </button>
-            <button id="cat-evening" onclick="selectCategory('EVENING')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+            <button id="cat-evening" onclick="selectCategory('EVENING')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition font-semibold">
               🌙 Evening & Night Flights
             </button>
           </div>
@@ -307,8 +305,8 @@
       
       <div class="flex items-center justify-between border-b border-slate-100 pb-4">
         <div>
-          <h2 class="text-lg font-display font-extrabold text-slate-900">🎟️ Confirmed Bookings</h2>
-          <p class="text-xs text-slate-500 mt-0.5">Manage and cancel your booked flight reservations.</p>
+          <h2 class="text-lg font-display font-extrabold text-slate-900">🎟️ Confirmed Demo Bookings</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Manage and cancel simulated reservations stored in your browser.</p>
         </div>
         <span id="booking-badge" class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full border border-blue-200">0 Bookings</span>
       </div>
@@ -322,15 +320,18 @@
 
   </main>
 
-  <!-- ================= PASSENGER BOOKING MODAL (SEAT SELECTION REMOVED) ================= -->
+  <!-- ================= PASSENGER BOOKING MODAL (PORTFOLIO DEMO) ================= -->
   <div id="booking-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 hidden overflow-y-auto">
     <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full border border-slate-100 overflow-hidden transform transition-all my-8">
       
       <!-- Header -->
-      <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white p-5 flex items-center justify-between">
+      <div class="bg-slate-900 text-white p-5 flex items-center justify-between border-b border-slate-800">
         <div>
-          <h3 class="font-display font-extrabold text-lg">Flight Reservation</h3>
-          <p class="text-xs text-slate-300">Fill passenger details to complete booking</p>
+          <div class="inline-flex items-center gap-1.5 bg-blue-500/10 text-blue-400 text-[10px] font-bold px-2 py-0.5 rounded-md mb-1">
+            <span>🛠️ Portfolio Demo Mode</span>
+          </div>
+          <h3 class="font-display font-extrabold text-lg">Simulated Flight Reservation</h3>
+          <p class="text-xs text-slate-400">Enter mock passenger details to test LocalStorage booking</p>
         </div>
         <button id="close-booking-modal" class="text-white/80 hover:text-white text-2xl font-bold p-1 leading-none">&times;</button>
       </div>
@@ -345,7 +346,7 @@
         
         <!-- Full Name -->
         <div>
-          <label for="pass-name" class="block font-bold text-slate-700 mb-1 uppercase tracking-wider text-[11px]">Passenger Full Name (as per ID) *</label>
+          <label for="pass-name" class="block font-bold text-slate-700 mb-1 uppercase tracking-wider text-[11px]">Passenger Full Name (Mock Name) *</label>
           <input type="text" id="pass-name" required placeholder="e.g. Aman Sharma" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs font-bold focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none text-slate-900" />
         </div>
 
@@ -375,14 +376,14 @@
         <div class="pt-3 border-t border-slate-200 space-y-3">
           <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-200">
             <div>
-              <span class="text-xs font-bold text-slate-700">Total Payable Fare:</span>
-              <p class="text-[10px] text-slate-400">All inclusive taxes & fees</p>
+              <span class="text-xs font-bold text-slate-700">Simulated Fare:</span>
+              <p class="text-[10px] text-slate-400">Demo only • No payment collected</p>
             </div>
             <span id="modal-total-fare-text" class="text-xl font-display font-black text-blue-700">₹0</span>
           </div>
 
           <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-98 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-2 cursor-pointer text-sm">
-            <span>✅ Confirm Booking</span>
+            <span>✅ Confirm Demo Booking</span>
           </button>
         </div>
 
@@ -394,40 +395,38 @@
   <!-- ================= CANCELLATION CONFIRMATION MODAL ================= -->
   <div id="cancel-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full border border-slate-100 p-6 space-y-4 text-center">
-      <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto shadow-inner">
-        ⚠️
+      
+      <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto border border-rose-100">
+        🗑️
       </div>
-      <div>
-        <h3 class="font-display font-extrabold text-slate-900 text-lg">Cancel Reservation?</h3>
-        <p class="text-xs text-slate-500 mt-1" id="cancel-modal-msg">
-          Are you sure you want to cancel this ticket? Full refund will be initiated back to your original payment method.
-        </p>
+
+      <div class="space-y-1">
+        <h3 class="font-display font-extrabold text-slate-900 text-base">Cancel Demo Ticket?</h3>
+        <p id="cancel-modal-msg" class="text-xs text-slate-500">Are you sure you want to cancel this booking?</p>
       </div>
-      <div class="flex gap-2.5 pt-2">
-        <button type="button" onclick="closeCancelModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-2xl text-xs transition active:scale-95">
-          Keep Ticket
+
+      <div class="grid grid-cols-2 gap-2.5 pt-2">
+        <button onclick="closeCancelModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition cursor-pointer">
+          Keep Booking
         </button>
-        <button type="button" id="confirm-cancel-action-btn" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-extrabold py-3 rounded-2xl text-xs transition shadow-md shadow-rose-600/30 active:scale-95">
+        <button id="confirm-cancel-action-btn" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-md shadow-rose-600/20 active:scale-95 cursor-pointer">
           Yes, Cancel
         </button>
       </div>
+
     </div>
   </div>
 
-  <!-- ================= MODERN FOOTER ================= -->
-  <footer class="bg-slate-900 text-slate-400 text-xs py-10 border-t border-slate-800">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-      <div>
-        <div class="flex items-center justify-center sm:justify-start gap-2">
-          <span class="text-base">✈️</span>
-          <span class="font-display font-extrabold text-white text-sm">SkyWings Airline Portal</span>
-        </div>
-        <p class="text-slate-500 text-[11px] mt-0.5">Reliable flight search, booking, and ticket management.</p>
-      </div>
-      <p class="text-slate-500">© 2026 SkyWings • All Rights Reserved</p>
-    </div>
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 text-center space-y-2">
+    <p class="font-bold text-white">AeroDemo • Student Educational Web Application</p>
+    <p class="text-[11px] text-slate-500 max-w-md mx-auto">
+      This is a portfolio demonstration project built with Vanilla JS & TailwindCSS. No real airline affiliations, data harvesting, or financial transactions.
+    </p>
   </footer>
 
+  <!-- Core JavaScript Logic -->
   <script src="functions.js"></script>
+
 </body>
 </html>
